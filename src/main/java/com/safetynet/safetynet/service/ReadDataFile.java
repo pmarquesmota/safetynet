@@ -4,10 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ReadFile {
+public class ReadDataFile {
     public static String read() {
         try {
-            InputStream fis = ReadFile
+            InputStream fis = ReadDataFile
                     .class
                     .getClassLoader()
                     .getResourceAsStream("data.json");
