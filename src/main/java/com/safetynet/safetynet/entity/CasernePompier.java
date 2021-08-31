@@ -1,20 +1,30 @@
 package com.safetynet.safetynet.entity;
 
-import lombok.Data;
+import com.safetynet.safetynet.model.FireStation;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 public class CasernePompier {
     @Id
-    @GeneratedValue
     private Long id;
 
     @ElementCollection
     private List<String> adresses;
+
+    public CasernePompier(FireStation fireStation) {
+        id = Long.parseLong(fireStation.station);
+        adresses = new ArrayList<>();
+        adresses.add(fireStation.address);
+    }
 }

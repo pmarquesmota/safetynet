@@ -1,5 +1,10 @@
 package com.safetynet.safetynet.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class Person {
     public String firstName;
     public String lastName;
@@ -9,7 +14,4 @@ public class Person {
     public String phone;
     public String email;
 
-    public Person() {
-
-    }
 }

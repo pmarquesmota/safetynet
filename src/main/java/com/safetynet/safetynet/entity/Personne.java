@@ -1,12 +1,18 @@
 package com.safetynet.safetynet.entity;
 
-import lombok.Data;
+import com.safetynet.safetynet.model.Person;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Personne {
     @Id
     @GeneratedValue
@@ -33,12 +39,18 @@ public class Personne {
     @Column
     private String email;
 
-    @Column
-    @Temporal(TemporalType.DATE)
-    private Date dateNaissance;
-
     @JoinColumn
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private DossierMedical dossierMedical;
+
+    public Personne(Person person) {
+        prenom = person.getFirstName();
+        nom = person.getLastName();
+        adresse = person.getAddress();
+        ville = person.getCity();
+        codePostal = person.getZip();
+        telephone = person.getPhone();
+        email = person.getEmail();
+    }
 
 }

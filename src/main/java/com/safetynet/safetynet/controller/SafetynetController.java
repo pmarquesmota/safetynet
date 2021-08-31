@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SafetynetController {
 
-    @GetMapping("/world")
+    @GetMapping("/")
     public Data hello() {
         String json = ReadDataFile.read();
         Data data = JsonIterator.deserialize(json, Data.class);
         return data;
     }
-
 }

@@ -1,5 +1,8 @@
 package com.safetynet.safetynet.model;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class MedicalRecord {
     public String firstName;
     public String lastName;
@@ -7,7 +10,4 @@ public class MedicalRecord {
     public String[] medications;
     public String[] allergies;
 
-    public MedicalRecord() {
-
-    }
 }
