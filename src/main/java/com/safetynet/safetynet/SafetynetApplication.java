@@ -37,25 +37,10 @@ public class SafetynetApplication implements CommandLineRunner {
         SpringApplication.run(SafetynetApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) {
-        List<Personne> personnes = new ArrayList<>();
+    static List<CasernePompier> createCasernes(Data data) {
         List<CasernePompier> casernes = new ArrayList<>();
         AtomicReference<Boolean> foundCaserne = new AtomicReference<>(false);
 
-        // extraire les données du json
-        String json = ReadDataFile.read();
-        Data data = JsonIterator.deserialize(json, Data.class);
-
-        // TODO convertir les 3 objets
-        //      liste de personnes, dossiers médicaux, casernes
-        Arrays.asList(data.persons).forEach(name -> {
-            Personne tmpPersonne = new Personne(name);
-            // trouver dans data.medicalrecords le medicalrecord qui correspond à la personne
-            DossierMedical dossierMedical = findDossierMedical(data.medicalrecords, name.getFirstName(), name.getLastName());
-            tmpPersonne.setDossierMedical(dossierMedical);
-            personnes.add(tmpPersonne);
-        });
         Arrays.asList(data.firestations).forEach(name -> {
             casernes.forEach(casernePompier -> {
                 if (casernePompier.getId() == Long.parseLong(name.station)) {
@@ -72,9 +57,20 @@ public class SafetynetApplication implements CommandLineRunner {
             foundCaserne.set(false);
         });
 
-        // TODO enregistrer les données dans la db
-        personneRepository.saveAll(personnes);
-        casernePompierRepository.saveAll(casernes);
+        return casernes;
+    }
+
+    static List<Personne> createPersonnes(Data data) {
+        List<Personne> personnes = new ArrayList<>();
+
+        Arrays.asList(data.persons).forEach(name -> {
+            Personne tmpPersonne = new Personne(name);
+            // trouver dans data.medicalrecords le medicalrecord qui correspond à la personne
+            DossierMedical dossierMedical = findDossierMedical(data.medicalrecords, name.getFirstName(), name.getLastName());
+            tmpPersonne.setDossierMedical(dossierMedical);
+            personnes.add(tmpPersonne);
+        });
+        return personnes;
     }
 
     static DossierMedical findDossierMedical(MedicalRecord[] medicalRecord, String prenom, String nom) {
@@ -86,5 +82,22 @@ public class SafetynetApplication implements CommandLineRunner {
 
         DossierMedical dm = new DossierMedical(m.get(0));
         return dm;
+    }
+
+    @Override
+    public void run(String... args) {
+
+        // extraire les données du json
+        String json = ReadDataFile.read();
+        Data data = JsonIterator.deserialize(json, Data.class);
+
+        // TODO convertir les 3 objets
+        //      liste de personnes, dossiers médicaux, casernes
+        List<Personne> personnes = createPersonnes(data);
+        List<CasernePompier> casernes = createCasernes(data);
+
+        // TODO enregistrer les données dans la db
+        personneRepository.saveAll(personnes);
+        casernePompierRepository.saveAll(casernes);
     }
 }

@@ -2,6 +2,7 @@ package com.safetynet.safetynet.entity;
 
 import com.safetynet.safetynet.model.FireStation;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class CasernePompier {
     @Id
     private Long id;
