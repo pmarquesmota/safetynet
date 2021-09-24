@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonneRepository extends JpaRepository<Personne, Long> {
-
+    //Optional<Personne> findByAddressAndBirthdateBefore(String address, Date after);
 }

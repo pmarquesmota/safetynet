@@ -1,35 +1,57 @@
 package com.safetynet.safetynet.controller;
 
 import com.safetynet.safetynet.entity.Personne;
+import com.safetynet.safetynet.service.PersonneService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+    @Autowired
+    private PersonneService personneService;
+
     @GetMapping("")
-    public String getPersons() {
-        //utiliser la couche service
-        return "Not implemented";
+    public ResponseEntity<List<Personne>> getPersons() {
+        return ResponseEntity.ok(personneService.getPersonnes());
     }
 
     @GetMapping("/{id}")
-    public String getPerson(@PathVariable("id") Long id) {
-        return "Not implemented";
+    public ResponseEntity<Personne> getPerson(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok(personneService.getPersonne(id));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @PostMapping("")
-    public String addPerson(@RequestBody Personne personne) {
-        return "Not implemented";
+    public ResponseEntity<Personne> addPerson(@RequestBody Personne personne) {
+        return ResponseEntity.ok(personneService.addPersonne(personne));
     }
 
     @PutMapping("/{id}")
-    public String modifyPerson(@PathVariable("id") Long id, @RequestBody Personne personne) {
-        return "Not implemented";
+    public ResponseEntity<Personne> modifyPerson(@PathVariable("id") Long id, @RequestBody Personne personne) {
+        try {
+            return ResponseEntity.ok(personneService.modifyPersonne(id, personne));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public String deletePerson(@PathVariable("id") Long id) {
-        return "Not implemented";
+    public ResponseEntity<?> deletePerson(@PathVariable("id") Long id) {
+        try {
+            personneService.deletePersonne(id);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

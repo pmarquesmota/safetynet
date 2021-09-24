@@ -1,10 +1,7 @@
 package com.safetynet.safetynet.entity;
 
 import com.safetynet.safetynet.model.Person;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class Personne {
     @Id
@@ -40,7 +38,7 @@ public class Personne {
     private String email;
 
     @JoinColumn
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     private DossierMedical dossierMedical;
 
     public Personne(Person person) {
