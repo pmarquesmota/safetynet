@@ -1,7 +1,6 @@
 package com.safetynet.safetynet.controller;
 
 import com.safetynet.safetynet.entity.CasernePompier;
-import com.safetynet.safetynet.repository.CasernePompierRepository;
 import com.safetynet.safetynet.service.CasernePompierService;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,17 +33,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FireStationControllerTest {
     @Autowired
     MockMvc mvc;
-    @Autowired
-    CasernePompierRepository casernePompierRepository;
 
     @MockBean
     CasernePompierService casernePompierService;
 
     @Test
     public void getCasernes_shouldReturnOK() throws Exception {
-        List<CasernePompier> listeCasernePompier = new ArrayList<>();
-        listeCasernePompier.add(new CasernePompier());
-        when(casernePompierService.getCasernes()).thenReturn(listeCasernePompier);
+        when(casernePompierService.getCasernes()).thenReturn(new ArrayList<>());
 
         mvc.perform(get("/firestation"))
                 .andExpect(status().isOk());

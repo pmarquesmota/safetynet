@@ -156,7 +156,6 @@
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
-                        <exclude>com/safetynet/safetynet/service/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
