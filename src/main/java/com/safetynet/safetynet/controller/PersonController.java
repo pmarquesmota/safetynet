@@ -2,6 +2,7 @@ package com.safetynet.safetynet.controller;
 
 import com.safetynet.safetynet.entity.Personne;
 import com.safetynet.safetynet.service.PersonneService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -22,9 +24,11 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Personne> getPerson(@PathVariable("id") Long id) {
+        log.info("GET /person/" + id);
         try {
             return ResponseEntity.ok(personneService.getPersonne(id));
         } catch (NoSuchElementException e) {
+            log.error("GET /person/" + id + " - Error : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
 

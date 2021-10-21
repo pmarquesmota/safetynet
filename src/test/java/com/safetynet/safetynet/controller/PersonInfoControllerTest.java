@@ -37,7 +37,7 @@ public class PersonInfoControllerTest {
     public void getPersonInfo_shouldReturnOK() throws Exception {
         when(personInfoService.getPersonInfo(any(), any())).thenReturn(new ArrayList<>());
 
-        mvc.perform(get("/personInfo?firstName=Paul&LastName=Marques%20Mota"))
+        mvc.perform(get("/personInfo?firstName=Paul&lastName=Marques%20Mota"))
                 .andExpect(status().isOk());
     }
 
@@ -45,7 +45,7 @@ public class PersonInfoControllerTest {
     public void getPersonInfo_shouldReturnNotFound() throws Exception {
         when(personInfoService.getPersonInfo(any(), any())).thenThrow(new NoSuchElementException());
 
-        mvc.perform(get("/personInfo?firstName=Paul&LastName=Marques%20Mota"))
+        mvc.perform(get("/personInfo?firstName=Paul&lastName=Marques%20Mota"))
                 .andExpect(status().isNotFound());
     }
 

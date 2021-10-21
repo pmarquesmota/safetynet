@@ -91,12 +91,12 @@ public class SafetynetApplication implements CommandLineRunner {
         String json = ReadDataFile.read();
         Data data = JsonIterator.deserialize(json, Data.class);
 
-        // TODO convertir les 3 objets
+        //  convertir les 3 objets
         //      liste de personnes, dossiers médicaux, casernes
         List<Personne> personnes = createPersonnes(data);
         List<CasernePompier> casernes = createCasernes(data);
 
-        // TODO enregistrer les données dans la db
+        //  enregistrer les données dans la db
         personneRepository.saveAll(personnes);
         casernePompierRepository.saveAll(casernes);
     }

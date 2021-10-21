@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Personne {

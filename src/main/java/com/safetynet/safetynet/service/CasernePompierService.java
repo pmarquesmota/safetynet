@@ -3,6 +3,7 @@ package com.safetynet.safetynet.service;
 import com.safetynet.safetynet.entity.CasernePompier;
 import com.safetynet.safetynet.entity.Personne;
 import com.safetynet.safetynet.model.StationNumber;
+import com.safetynet.safetynet.repository.BirthdayRepository;
 import com.safetynet.safetynet.repository.CasernePompierRepository;
 import com.safetynet.safetynet.repository.PersonneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import java.util.*;
 @Service
 public class CasernePompierService {
     @Autowired
-    CasernePompierRepository casernePompierRepository;
+    private CasernePompierRepository casernePompierRepository;
 
     @Autowired
-    PersonneRepository personneRepository;
+    private PersonneRepository personneRepository;
+
+    private final BirthdayRepository birthdayRepository = new BirthdayService();
 
     public CasernePompier getCaserne(Long id) throws NoSuchElementException {
         return casernePompierRepository.findById(id).orElseThrow(() ->
@@ -24,7 +27,7 @@ public class CasernePompierService {
     }
 
     public StationNumber getStationNumber(Long id) throws NoSuchElementException {
-        Date birthday = Birthday.initBirthday();
+        Date birthday = birthdayRepository.initBirthday();
 
         CasernePompier casernePompier = casernePompierRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("La caserne " + id + " n'existe pas"));
@@ -55,7 +58,7 @@ public class CasernePompierService {
                         personneRepository.
                                 findAllByAdresse(adresse))
                 .flatMap(Collection::stream)
-                .filter(p -> Birthday.getAge(p.getDossierMedical().getDateNaissance()) >= 18)
+                .filter(p -> birthdayRepository.getAge(p.getDossierMedical().getDateNaissance()) >= 18)
                 .count();
     }
 
@@ -67,7 +70,7 @@ public class CasernePompierService {
                         personneRepository.
                                 findAllByAdresse(adresse))
                 .flatMap(Collection::stream)
-                .filter(p -> Birthday.getAge(p.getDossierMedical().getDateNaissance()) < 18)
+                .filter(p -> birthdayRepository.getAge(p.getDossierMedical().getDateNaissance()) < 18)
                 .count();
     }
 

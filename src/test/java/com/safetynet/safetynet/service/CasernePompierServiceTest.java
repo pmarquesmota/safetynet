@@ -6,32 +6,39 @@ import com.safetynet.safetynet.entity.Personne;
 import com.safetynet.safetynet.model.MedicalRecord;
 import com.safetynet.safetynet.model.Person;
 import com.safetynet.safetynet.model.StationNumber;
+import com.safetynet.safetynet.repository.BirthdayRepository;
 import com.safetynet.safetynet.repository.CasernePompierRepository;
 import com.safetynet.safetynet.repository.PersonneRepository;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CasernePompierServiceTest {
 
-    @Autowired
+    @Mock
     PersonneRepository personneRepository;
-    @Autowired
-    private CasernePompierRepository casernePompierRepository;
+    @Mock
+    CasernePompierRepository casernePompierRepository;
+    @Mock
+    BirthdayRepository birthdayRepository;
+
+    @InjectMocks
+    CasernePompierService casernePompierService;
 
     @Test
-    public void getCaserne_shouldReturnOK() throws Exception {
+    public void getCaserne_shouldReturnOK() {
         List<String> adresses = new ArrayList<>();
         adresses.add("644 Gershwin Cir");
         adresses.add("908 73rd St");
@@ -40,27 +47,25 @@ public class CasernePompierServiceTest {
 
         when(casernePompierRepository.findById(1L)).thenReturn(java.util.Optional.of(casernePompier));
 
-        CasernePompierService casernePompierService = new CasernePompierService();
-        assertTrue(casernePompier.equals(casernePompierService.getCaserne(1L)));
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void getCaserne_shouldReturnNotFound() throws NoSuchElementException {
-        when(casernePompierRepository.findById(any())).thenThrow(new NoSuchElementException());
-        CasernePompierService casernePompierService = new CasernePompierService();
-        casernePompierService.getCaserne(1L);
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void getStationNumber_shouldReturnNotFound() throws NoSuchElementException {
-        when(casernePompierRepository.findById(any())).thenThrow(new NoSuchElementException());
-        CasernePompierService casernePompierService = new CasernePompierService();
-        casernePompierService.getStationNumber(1L);
+        assertEquals(casernePompier, casernePompierService.getCaserne(1L));
     }
 
     @Test
-    public void getStationNumber_shouldReturnOK() throws Exception {
-        List<String> adresses = Arrays.asList("1509 Culver St");
+    public void getCaserne_shouldReturnNotFound() throws NoSuchElementException {
+        when(casernePompierRepository.findById(any())).thenThrow(new NoSuchElementException());
+        assertThrows(NoSuchElementException.class, () -> casernePompierService.getCaserne(1L));
+    }
+
+    @Test
+    public void getStationNumber_shouldReturnNotFound() throws NoSuchElementException {
+        when(casernePompierRepository.findById(any())).thenThrow(new NoSuchElementException());
+        assertThrows(NoSuchElementException.class, () -> casernePompierService.getStationNumber(1L));
+    }
+
+    @Test
+    public void getStationNumber_shouldReturnOK() {
+
+        List<String> adresses = List.of("1509 Culver St");
         CasernePompier casernePompier = new CasernePompier(1L, adresses);
         when(casernePompierRepository.findById(1L)).thenReturn(java.util.Optional.of(casernePompier));
 
@@ -73,22 +78,71 @@ public class CasernePompierServiceTest {
                 "jaboyd@email.com"
         );
         Personne personne = new Personne(person);
+        personne.setDossierMedical(new DossierMedical(new MedicalRecord("", "", "03/06/1984", new String[0], new String[0])));
 
-        MedicalRecord medicalRecord = new MedicalRecord("John",
-                "Boyd",
-                "03/06/1984",
-                new String[]{"aznol:350mg", "hydrapermazol:100mg"},
-                new String[]{"nillacilan"}
-        );
-        personne.setDossierMedical(new DossierMedical(medicalRecord));
-
-        List<Personne> personnes = Arrays.asList(personne);
+        List<Personne> personnes = List.of(personne);
         when(personneRepository.findAllByAdresse(any())).thenReturn(personnes);
 
         StationNumber stationNumber = new StationNumber(personnes, 1, 0);
 
-        CasernePompierService casernePompierService = new CasernePompierService();
-        assertTrue(stationNumber.equals(casernePompierService.getStationNumber(1L)));
+        assertEquals(stationNumber, casernePompierService.getStationNumber(1L));
     }
 
+    @Test
+    public void getCasernes_shouldReturnOk() {
+        List<String> adresses = List.of("1509 Culver St");
+        CasernePompier casernePompier = new CasernePompier(1L, adresses);
+        List<CasernePompier> casernePompiers = List.of(casernePompier);
+        when(casernePompierRepository.findAll()).thenReturn(casernePompiers);
+
+        assertEquals(casernePompiers, casernePompierService.getCasernes());
+
+    }
+
+    @Test
+    public void getCasernes_shouldReturnNull() {
+        when(casernePompierRepository.findAll()).thenReturn(null);
+
+        assertNull(casernePompierService.getCasernes());
+
+    }
+
+    @Test
+    public void addCaserne_shouldReturnOk() {
+        List<String> adresses = List.of("1509 Culver St");
+        CasernePompier casernePompier = new CasernePompier(1L, adresses);
+        when(casernePompierRepository.save(any())).thenReturn(casernePompier);
+
+        assertEquals(casernePompier, casernePompierService.addCaserne(casernePompier));
+
+    }
+
+    @Test
+    public void modifyCaserne_shouldReturnOk() {
+        List<String> adresses = List.of("1509 Culver St");
+        CasernePompier casernePompier = new CasernePompier(1L, adresses);
+        when(casernePompierRepository.findById(any())).thenReturn(java.util.Optional.of(casernePompier));
+        when(casernePompierRepository.save(any())).thenReturn(casernePompier);
+
+        assertEquals(casernePompier, casernePompierService.modifyCaserne(1L, casernePompier));
+
+    }
+
+    @Test
+    public void modifyCaserne_shouldReturnNotFound() {
+        List<String> adresses = List.of("1509 Culver St");
+        CasernePompier casernePompier = new CasernePompier(1L, adresses);
+        when(casernePompierRepository.findById(any())).thenThrow(new NoSuchElementException());
+
+        assertThrows(NoSuchElementException.class, () -> casernePompierService.modifyCaserne(1L, casernePompier));
+
+    }
+
+    @Test
+    public void deleteCaserne_shouldReturnOk() {
+        when(casernePompierRepository.existsById(any())).thenReturn(true);
+
+        casernePompierService.deleteCaserne(1L);
+        verify(casernePompierRepository).deleteById(any());
+    }
 }

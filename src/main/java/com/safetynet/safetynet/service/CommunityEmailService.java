@@ -25,7 +25,8 @@ public class CommunityEmailService {
 
         List<Email> emails = personnes
                 .stream()
-                .filter(p -> set.add(p.getEmail()))
+                .filter(personne -> personne.getVille().equals(city))
+                .filter(personne -> set.add(personne.getEmail()))
                 .map(p -> new Email(p.getEmail()))
                 .collect(Collectors.toList());
         return emails;
