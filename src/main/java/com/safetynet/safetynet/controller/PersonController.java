@@ -19,6 +19,7 @@ public class PersonController {
 
     @GetMapping("")
     public ResponseEntity<List<Personne>> getPersons() {
+        log.info("GET /person");
         return ResponseEntity.ok(personneService.getPersonnes());
     }
 
@@ -36,24 +37,29 @@ public class PersonController {
 
     @PostMapping("")
     public ResponseEntity<Personne> addPerson(@RequestBody Personne personne) {
+        log.info("POST /person " + personne.toString());
         return ResponseEntity.ok(personneService.addPersonne(personne));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Personne> modifyPerson(@PathVariable("id") Long id, @RequestBody Personne personne) {
+        log.info("PUT /person/" + id + " " + personne.toString());
         try {
             return ResponseEntity.ok(personneService.modifyPersonne(id, personne));
         } catch (NoSuchElementException e) {
+            log.error("PUT /person/" + id + " - Error : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePerson(@PathVariable("id") Long id) {
+        log.info("DELETE /person/" + id);
         try {
             personneService.deletePersonne(id);
             return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e) {
+            log.error("DELETE /person/" + id + " - Error : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
