@@ -37,7 +37,31 @@ public class SafetynetApplication implements CommandLineRunner {
         SpringApplication.run(SafetynetApplication.class, args);
     }
 
-    static List<CasernePompier> createCasernes(Data data) {
+    DossierMedical findDossierMedical(MedicalRecord[] medicalRecord, String prenom, String nom) {
+
+        List<MedicalRecord> m = Arrays.asList(medicalRecord)
+                .stream()
+                .filter(r -> (r.firstName.equals(prenom) && r.lastName.equals(nom)))
+                .collect(Collectors.toList());
+
+        DossierMedical dm = new DossierMedical(m.get(0));
+        return dm;
+    }
+
+    List<Personne> createPersonnes(Data data) {
+        List<Personne> personnes = new ArrayList<>();
+
+        Arrays.asList(data.persons).forEach(name -> {
+            Personne tmpPersonne = new Personne(name);
+            // trouver dans data.medicalrecords le medicalrecord qui correspond à la personne
+            DossierMedical dossierMedical = findDossierMedical(data.medicalrecords, name.getFirstName(), name.getLastName());
+            tmpPersonne.setDossierMedical(dossierMedical);
+            personnes.add(tmpPersonne);
+        });
+        return personnes;
+    }
+
+    List<CasernePompier> createCasernes(Data data) {
         List<CasernePompier> casernes = new ArrayList<>();
         AtomicReference<Boolean> foundCaserne = new AtomicReference<>(false);
 
@@ -58,30 +82,6 @@ public class SafetynetApplication implements CommandLineRunner {
         });
 
         return casernes;
-    }
-
-    static List<Personne> createPersonnes(Data data) {
-        List<Personne> personnes = new ArrayList<>();
-
-        Arrays.asList(data.persons).forEach(name -> {
-            Personne tmpPersonne = new Personne(name);
-            // trouver dans data.medicalrecords le medicalrecord qui correspond à la personne
-            DossierMedical dossierMedical = findDossierMedical(data.medicalrecords, name.getFirstName(), name.getLastName());
-            tmpPersonne.setDossierMedical(dossierMedical);
-            personnes.add(tmpPersonne);
-        });
-        return personnes;
-    }
-
-    static DossierMedical findDossierMedical(MedicalRecord[] medicalRecord, String prenom, String nom) {
-
-        List<MedicalRecord> m = Arrays.asList(medicalRecord)
-                .stream()
-                .filter(r -> (r.firstName.equals(prenom) && r.lastName.equals(nom)))
-                .collect(Collectors.toList());
-
-        DossierMedical dm = new DossierMedical(m.get(0));
-        return dm;
     }
 
     @Override

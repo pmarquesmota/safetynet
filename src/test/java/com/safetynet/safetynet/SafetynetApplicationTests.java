@@ -24,7 +24,8 @@ class SafetynetApplicationTests {
         fireStations[0] = fireStation;
         Data data = new Data(new Person[]{}, fireStations, new MedicalRecord[]{});
 
-        List<CasernePompier> casernePompiers = SafetynetApplication.createCasernes(data);
+        SafetynetApplication safetynetApplication = new SafetynetApplication();
+        List<CasernePompier> casernePompiers = safetynetApplication.createCasernes(data);
 
         Assertions.assertEquals("1509 Culver St", casernePompiers.get(0).getAdresses().get(0));
     }
@@ -38,7 +39,8 @@ class SafetynetApplicationTests {
         fireStations[1] = fireStation2;
         Data data = new Data(new Person[]{}, fireStations, new MedicalRecord[]{});
 
-        List<CasernePompier> casernePompiers = SafetynetApplication.createCasernes(data);
+        SafetynetApplication safetynetApplication = new SafetynetApplication();
+        List<CasernePompier> casernePompiers = safetynetApplication.createCasernes(data);
 
         Assertions.assertEquals("1509 Culver St", casernePompiers.get(0).getAdresses().get(0));
         Assertions.assertEquals("834 Binoc Ave", casernePompiers.get(0).getAdresses().get(1));
@@ -56,7 +58,8 @@ class SafetynetApplicationTests {
 
         Data data = new Data(persons, new FireStation[]{}, medicalRecords);
 
-        List<Personne> personnes = SafetynetApplication.createPersonnes(data);
+        SafetynetApplication safetynetApplication = new SafetynetApplication();
+        List<Personne> personnes = safetynetApplication.createPersonnes(data);
 
         Assertions.assertEquals("John", personnes.get(0).getPrenom());
     }
@@ -69,7 +72,8 @@ class SafetynetApplicationTests {
 
         DossierMedical dm = new DossierMedical(medicalRecord);
 
-        DossierMedical dossierMedical = SafetynetApplication.findDossierMedical(medicalRecords, "John", "Doe");
+        SafetynetApplication safetynetApplication = new SafetynetApplication();
+        DossierMedical dossierMedical = safetynetApplication.findDossierMedical(medicalRecords, "John", "Doe");
 
         Assertions.assertEquals(dm, dossierMedical);
 
@@ -81,8 +85,10 @@ class SafetynetApplicationTests {
         MedicalRecord[] medicalRecords = new MedicalRecord[1];
         medicalRecords[0] = medicalRecord;
 
-        DossierMedical dossierMedical = SafetynetApplication.findDossierMedical(medicalRecords, "John", "Doe");
+        SafetynetApplication safetynetApplication = new SafetynetApplication();
+        DossierMedical dossierMedical = safetynetApplication.findDossierMedical(medicalRecords, "John", "Doe");
 
+        //assertThrows(ParseException.class, () -> dossierMedical.getDateNaissance());
         Assertions.assertEquals(dossierMedical.getDateNaissance(), null);
 
     }
