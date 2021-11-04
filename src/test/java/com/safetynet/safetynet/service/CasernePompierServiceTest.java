@@ -83,9 +83,9 @@ public class CasernePompierServiceTest {
         List<Personne> personnes = List.of(personne);
         when(personneRepository.findAllByAdresse(any())).thenReturn(personnes);
 
-        StationNumber stationNumber = new StationNumber(personnes, 1, 0);
-
-        assertEquals(stationNumber, casernePompierService.getStationNumber(1L));
+        StationNumber stationNumber = new StationNumber(personnes, 0, 1);
+        StationNumber stationNumber_to_find = casernePompierService.getStationNumber(1L);
+        assertEquals(stationNumber, stationNumber_to_find);
     }
 
     @Test
