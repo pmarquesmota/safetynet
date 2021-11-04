@@ -26,7 +26,9 @@ public class DossierMedicalService {
     }
 
     public DossierMedical modifyDossierMedical(Long id, DossierMedical dossierMedical) throws NoSuchElementException {
-        DossierMedical oldDossierMedical = dossierMedicalRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Le dossier medical " + id + " n'existe pas"));
+        DossierMedical oldDossierMedical = dossierMedicalRepository.
+                findById(id).orElseThrow(() ->
+                        new NoSuchElementException("Le dossier medical " + id + " n'existe pas"));
         oldDossierMedical.setDateNaissance(dossierMedical.getDateNaissance());
         oldDossierMedical.setMedicaments(dossierMedical.getMedicaments());
         oldDossierMedical.setAllergies(dossierMedical.getAllergies());

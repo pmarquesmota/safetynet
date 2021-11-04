@@ -16,6 +16,7 @@ public class CommunityEmailService {
     @Autowired
     PersonneRepository personneRepository;
 
+    // Get emails from people living at city
     public List<Email> getCommunityEmailService(String city) {
         List<Personne> personnes = personneRepository.findByVille(city);
 

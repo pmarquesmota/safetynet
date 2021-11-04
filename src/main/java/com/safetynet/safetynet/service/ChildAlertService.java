@@ -19,20 +19,25 @@ public class ChildAlertService {
     @Autowired
     private BirthdayRepository birthdayRepository;
 
+    // Return a list of children and adults living at the address
     public ChildAlert getChildAlert(String address) {
 
         List<Child> enfants = personneRepository
+                // get all people living at the address
                 .findAllByAdresse(address)
                 .stream()
+                // only keep children
                 .filter(p ->
                         birthdayRepository.getAge(p.getDossierMedical().getDateNaissance()) < 18
                 )
+                // Create objects from result
                 .map(p -> new Child(
                         p.getPrenom(),
                         p.getNom(),
                         birthdayRepository.getAge(p.getDossierMedical().getDateNaissance())
 
                 ))
+                // Create List from the result
                 .collect(Collectors.toList());
 
         List<Personne> autres = personneRepository

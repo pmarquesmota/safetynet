@@ -20,10 +20,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-// Logs
-//actuators/
-//urls/
-//endpoints
 @SpringBootApplication
 public class SafetynetApplication implements CommandLineRunner {
 
@@ -40,6 +36,7 @@ public class SafetynetApplication implements CommandLineRunner {
         SpringApplication.run(SafetynetApplication.class, args);
     }
 
+    // Return the DossierMedical object from the data.json medical record, the first name and last name
     DossierMedical findDossierMedical(MedicalRecord[] medicalRecord, String prenom, String nom) {
 
         List<MedicalRecord> m = Arrays.asList(medicalRecord)
@@ -51,6 +48,7 @@ public class SafetynetApplication implements CommandLineRunner {
         return dm;
     }
 
+    // Create the List of Personne objects from the data.json, including medical records
     List<Personne> createPersonnes(Data data) {
         List<Personne> personnes = new ArrayList<>();
 
@@ -64,12 +62,14 @@ public class SafetynetApplication implements CommandLineRunner {
         return personnes;
     }
 
+    // Create the firestation from the data.json
     List<CasernePompier> createCasernes(Data data) {
         List<CasernePompier> casernes = new ArrayList<>();
         AtomicReference<Boolean> foundCaserne = new AtomicReference<>(false);
 
         Arrays.asList(data.firestations).forEach(name -> {
             casernes.forEach(casernePompier -> {
+                // If the casernePompier object already exists, we add the address to the existing object
                 if (casernePompier.getId() == Long.parseLong(name.station)) {
                     foundCaserne.set(true);
 
@@ -78,6 +78,7 @@ public class SafetynetApplication implements CommandLineRunner {
                     casernePompier.setAdresses(adresses);
                 }
             });
+            // If the casernePompier object doesn't exists, we add a new object
             if (!foundCaserne.get()) {
                 casernes.add(new CasernePompier(name));
             }

@@ -42,6 +42,7 @@ public class CasernePompierService {
         return new StationNumber(personnes, adultes, enfants);
     }
 
+    // Returns the persons living at the casern
     List<Personne> initPersonnes(CasernePompier casernePompier) {
         List<Personne> personnes = new ArrayList<>();
         casernePompier
@@ -51,6 +52,7 @@ public class CasernePompierService {
         return personnes;
     }
 
+    // Count the adults living at the casern
     long initAdultes(CasernePompier casernePompier, Date birthday) {
         return casernePompier
                 .getAdresses()
@@ -63,6 +65,7 @@ public class CasernePompierService {
                 .count();
     }
 
+    // Count the children living at the casern
     long initEnfants(CasernePompier casernePompier, Date birthday) {
         return casernePompier
                 .getAdresses()

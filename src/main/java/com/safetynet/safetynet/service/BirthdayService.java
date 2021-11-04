@@ -9,6 +9,8 @@ import java.util.Date;
 
 @Service
 public class BirthdayService implements BirthdayRepository {
+
+    // Get the date 18 years before
     public Date initBirthday() {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
@@ -17,6 +19,7 @@ public class BirthdayService implements BirthdayRepository {
         return c.getTime();
     }
 
+    // Return the age in years from the date
     public long getAge(Date d) {
         return (System.currentTimeMillis()
                 - d.getTime())
