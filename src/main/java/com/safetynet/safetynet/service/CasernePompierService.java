@@ -19,7 +19,8 @@ public class CasernePompierService {
     @Autowired
     private PersonneRepository personneRepository;
 
-    private final BirthdayRepository birthdayRepository = new BirthdayService();
+    @Autowired
+    private BirthdayRepository birthdayRepository;
 
     public CasernePompier getCaserne(Long id) throws NoSuchElementException {
         return casernePompierRepository.findById(id).orElseThrow(() ->
