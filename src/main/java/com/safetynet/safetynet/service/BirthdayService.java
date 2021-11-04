@@ -1,13 +1,14 @@
 package com.safetynet.safetynet.service;
 
 
+import com.safetynet.safetynet.repository.BirthdayRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Service
-public class BirthdayService {
+public class BirthdayService implements BirthdayRepository {
     public Date initBirthday() {
         Date date = new Date();
         Calendar c = Calendar.getInstance();

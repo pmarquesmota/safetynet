@@ -8,7 +8,7 @@ import com.safetynet.safetynet.model.Data;
 import com.safetynet.safetynet.model.MedicalRecord;
 import com.safetynet.safetynet.repository.CasernePompierRepository;
 import com.safetynet.safetynet.repository.PersonneRepository;
-import com.safetynet.safetynet.service.ReadDataFile;
+import com.safetynet.safetynet.repository.ReadDataFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,6 +32,9 @@ public class SafetynetApplication implements CommandLineRunner {
 
     @Autowired
     CasernePompierRepository casernePompierRepository;
+
+    @Autowired
+    ReadDataFileRepository readDataFileRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(SafetynetApplication.class, args);
@@ -88,7 +91,7 @@ public class SafetynetApplication implements CommandLineRunner {
     public void run(String... args) {
 
         // extraire les données du json
-        String json = ReadDataFile.read();
+        String json = readDataFileRepository.read();
         Data data = JsonIterator.deserialize(json, Data.class);
 
         //  convertir les 3 objets

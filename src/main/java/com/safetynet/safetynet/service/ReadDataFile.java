@@ -1,11 +1,15 @@
 package com.safetynet.safetynet.service;
 
+import com.safetynet.safetynet.repository.ReadDataFileRepository;
+import org.springframework.stereotype.Service;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ReadDataFile {
-    public static String read() {
+@Service
+public class ReadDataFile implements ReadDataFileRepository {
+    public String read() {
         try {
             InputStream fis = ReadDataFile
                     .class
